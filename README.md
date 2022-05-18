@@ -1,2 +1,2 @@
 # EBSD
-Matlab code for EBSD analysis
+Matlab codes for EBSD analysis
