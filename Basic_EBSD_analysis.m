@@ -6,7 +6,6 @@ clear all; close all; clc
 
 %% Define parameters
 
-
 % Define x and y directions to match the SEM images
 plotx2east; plotzIntoPlane
 
