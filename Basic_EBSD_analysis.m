@@ -9,6 +9,9 @@ clear all; close all; clc
 % Define x and y directions to match the SEM images
 plotx2east; plotzIntoPlane
 
+% Phase to be analyzed
+Phase_chosen = 'Magnesium';
+
 % Degree threshold of grain boundary
 GrainAngle = 10;
 
@@ -37,7 +40,7 @@ mP.micronBar.visible = 'off';
 print(gcf,[fname(1:end-4) '_RawMap_NoScaleBar'],'-dpng','-r400');
 
 % plot ipf key
-ipfKey = ipfColorKey(ebsd('Magnesium'));
+ipfKey = ipfColorKey(ebsd(Phase_chosen));
 figure;
 plot(ipfKey)
 print(gcf,[fname(1:end-4) '_ipfKey'],'-dpng','-r400');
@@ -49,9 +52,9 @@ print(gcf,[fname(1:end-4) '_ipfKey'],'-dpng','-r400');
 ebsd=ebsd_raw;
 
 % smooth and fill missing
-prompt = ['Level to denoise EBSD data. Input 1: High (recommended). Input 2: Middle. Input 3: Low'];
+prompt = ['Level to denoise EBSD data. Input 1:High;  Input 2:Middle;  Input 3:Low'];
 titlename = ['EBSD analysis'];
-option_denoise = inputdlg(prompt,titlename);
+option_denoise = inputdlg(prompt,titlename,[1 100]);
 option_denoise = str2num(option_denoise{1});
 F = splineFilter;
 % F = infimalConvolutionFilter;
@@ -91,17 +94,17 @@ grains = grains.smooth(5);
 %%%% plot X direction orientation map %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % defines an ipf color key for the Magnesium phase
-ipfKey = ipfColorKey(ebsd('Magnesium'));
+ipfKey = ipfColorKey(ebsd(Phase_chosen));
 
 % set the referece direction to X
 ipfKey.inversePoleFigureDirection = vector3d.X;
 
 % compute the colors
-colors = ipfKey.orientation2color(ebsd('Magnesium').orientations);
+colors = ipfKey.orientation2color(ebsd(Phase_chosen).orientations);
 
 % plot orientation map
 figure;
-[~,mP] = plot(ebsd('Magnesium'),colors)
+[~,mP] = plot(ebsd(Phase_chosen),colors)
 hold on
 plot(grains.boundary,'linewidth',1.5)
 hold off
@@ -116,11 +119,11 @@ print(gcf,[fname(1:end-4) '_IPFX_NoScaleBar'],'-dpng','-r400');
 ipfKey.inversePoleFigureDirection = vector3d.Y;
 
 % compute the colors
-colors = ipfKey.orientation2color(ebsd('Magnesium').orientations);
+colors = ipfKey.orientation2color(ebsd(Phase_chosen).orientations);
 
 % plot orientation map
 figure;
-[~,mP] = plot(ebsd('Magnesium'),colors)
+[~,mP] = plot(ebsd(Phase_chosen),colors)
 hold on
 plot(grains.boundary,'linewidth',1.5)
 hold off
@@ -135,11 +138,11 @@ print(gcf,[fname(1:end-4) '_IPFY_NoScaleBar'],'-dpng','-r400');
 ipfKey.inversePoleFigureDirection = vector3d.Z;
 
 % compute the colors
-colors = ipfKey.orientation2color(ebsd('Magnesium').orientations);
+colors = ipfKey.orientation2color(ebsd(Phase_chosen).orientations);
 
 % plot orientation map
 figure;
-[~,mP] = plot(ebsd('Magnesium'),colors)
+[~,mP] = plot(ebsd(Phase_chosen),colors)
 hold on
 plot(grains.boundary,'linewidth',1.5)
 hold off
@@ -167,14 +170,14 @@ rot = rotation.byAxisAngle(yvector,0*degree);
 ebsd_rotated = rotate(ebsd_raw,rot);
 
 % choose the plane for mapping
-h = [Miller(0,0,0,1,ebsd('Magnesium').CS),...
-    Miller(1,0,-1,0,ebsd('Magnesium').CS),...
-    Miller(1,0,-1,1,ebsd('Magnesium').CS),...
-    Miller(1,1,-2,2,ebsd('Magnesium').CS)];%,Miller(1,0,-1,2,ebsd('Magnesium').CS)];
+h = [Miller(0,0,0,1,ebsd(Phase_chosen).CS),...
+    Miller(1,0,-1,0,ebsd(Phase_chosen).CS),...
+    Miller(1,0,-1,1,ebsd(Phase_chosen).CS),...
+    Miller(1,1,-2,2,ebsd(Phase_chosen).CS)];%,Miller(1,0,-1,2,ebsd(Phase_chosen).CS)];
 
 % plot pole figure
 figure;
-plotPDF(ebsd_rotated('Magnesium').orientations,h,'contourf','minmax','antipodal');
+plotPDF(ebsd_rotated(Phase_chosen).orientations,h,'contourf','minmax','antipodal');
 % add colorbar
 CLim(gcm,'equal');
 mtexColorbar
@@ -185,28 +188,28 @@ mtexColorbar
 print(gcf,[fname(1:end-4) '_Pole'],'-dpng','-r400');
 
 figure;
-plotPDF(ebsd_rotated('Magnesium').orientations,h(1),'contourf','minmax','antipodal');
+plotPDF(ebsd_rotated(Phase_chosen).orientations,h(1),'contourf','minmax','antipodal');
 mtexColorbar
 print(gcf,[fname(1:end-4) '_Pole1'],'-dpng','-r400');
 
 figure;
-plotPDF(ebsd_rotated('Magnesium').orientations,h(2),'contourf','minmax','antipodal');
+plotPDF(ebsd_rotated(Phase_chosen).orientations,h(2),'contourf','minmax','antipodal');
 mtexColorbar
 print(gcf,[fname(1:end-4) '_Pole2'],'-dpng','-r400');
 
 figure;
-plotPDF(ebsd_rotated('Magnesium').orientations,h(3),'contourf','minmax','antipodal');
+plotPDF(ebsd_rotated(Phase_chosen).orientations,h(3),'contourf','minmax','antipodal');
 mtexColorbar
 print(gcf,[fname(1:end-4) '_Pole3'],'-dpng','-r400');
 
 figure;
-plotPDF(ebsd_rotated('Magnesium').orientations,h(4),'contourf','minmax','antipodal');
+plotPDF(ebsd_rotated(Phase_chosen).orientations,h(4),'contourf','minmax','antipodal');
 mtexColorbar
 print(gcf,[fname(1:end-4) '_Pole4'],'-dpng','-r400');
 
 %%%% plot inverse pole figure %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 figure;
-plotIPDF(ebsd('Magnesium').orientations,[xvector,yvector,zvector],'contourf');
+plotIPDF(ebsd(Phase_chosen).orientations,[xvector,yvector,zvector],'contourf');
 % add colorbar
 % CLim(gcm,'equal');
 mtexColorbar
@@ -238,7 +241,7 @@ print(gcf,[fname(1:end-4) '_KAM_NoScaleBar'],'-dpng','-r400');
 
 % extract new grain boundaries
 gB = grains.boundary;
-gB_MgMg = gB('Magnesium','Magnesium');
+gB_MgMg = gB(Phase_chosen,Phase_chosen);
 
 %% plot grain boundaries with misorientation angles
 
@@ -258,6 +261,7 @@ histogram(gB_MgMg.misorientation.angle./degree,40,'Normalization','probability')
 xlabel('Misorientation angle (degree)')
 ylabel('Frequency (%)')
 set(gca,'FontSize',15,'FontName','Times New Roman')
+boxaxes
 saveas(gcf,[fname(1:end-4) '_angles distribution'],'fig');
 print(gcf,[fname(1:end-4) '_angles distribution'],'-dpng','-r400');
 
@@ -276,6 +280,7 @@ figure
 a = histogram(r_chosen,15,'Normalization','probability');
 xlabel('Equivelent diameter (\mum)')
 ylabel('Frequency (%)')
+boxaxes
 set(gca,'FontSize',15,'FontName','Times New Roman')
 print(gcf,[fname(1:end-4) '_GrainSize'],'-dpng','-r400');
 
@@ -399,3 +404,30 @@ fprintf(fid,'%s %f \n','Grain size weighted by area:', grain_size);
 fprintf(fid,'%s %f \n','Exclude grain size <', grain_exclude);
 
 fclose(fid);
+
+%% Local function
+
+function [a,b]=boxaxes
+% get handle to current axes
+% a = gca;
+% % % get the original xlim, ylim
+% % xlim_ori = get(a,'XLim');
+% % ylim_ori = get(a,'YLim');
+% % set box property to off and remove background color
+% set(a,'box','off','color','none')
+% % create new, empty axes with box but without ticks
+% b = axes('Position',get(a,'Position'),'box','on','xtick',[],'ytick',[],'xlim',get(a,'XLim'),'ylim',get(a,'YLim'));
+% % set original axes as active
+% axes(a)
+% % link axes in case of zooming
+% linkaxes([a b])
+
+box off;
+a = gca;
+x = get(a,'XLim');
+y = get(a,'YLim');
+line([x(1) x(2)],[y(2) y(2)],'Color','k','linewidth',0.54)
+line([x(2) x(2)],[y(1) y(2)],'Color','k','linewidth',0.54)
+xlim(x)
+ylim(y)
+end
