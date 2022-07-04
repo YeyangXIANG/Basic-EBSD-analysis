@@ -14,11 +14,11 @@ Functions of the code
 -----------------------------------------------------------------------------------------
 1. Denose and reconstruct grains
 2. Plot orientation map
-3. Plot pole and inverse pole figures
+3. Plot pole and inverse pole figures (only HCP metals)
 4. Plot KAM map
 5. Plot grain boundary misorientation map
 6. Grain size analysis
-7. Twin analysis
+7. Twin analysis (only Mg)
 
 
 Further Reference
