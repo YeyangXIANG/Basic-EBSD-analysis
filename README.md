@@ -2,7 +2,7 @@
 
 Matlab code (based on MTEX) to do basic EBSD data analysis.
 
-Note, the analysis about twin is just a demo and not precise, which is not recommended.
+`Note, the analysis about twin is just a demo and not precise, which is not recommended.`
 
 
 Running the code
