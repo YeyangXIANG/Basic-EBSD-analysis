@@ -1,6 +1,6 @@
 # Basic EBSD data analysis
 
-Matlab code (based on MTEX 5.7.0) to do basic EBSD data analysis
+Matlab code (based on MTEX 5.7.0) to do basic EBSD data analysis.
 
 Note, the analysis about twin is just a demo and not precise, which is not recommended.
 
